@@ -30,8 +30,12 @@
 #elif (defined(__sparc) || defined(__sparc__)) && HAVE_SPARC_PAUSE
 #define isc_pause() __asm__ __volatile__("pause")
 #elif defined(__ppc__) || defined(_ARCH_PPC) || defined(_ARCH_PWR) || \
-	defined(_ARCH_PWR2) || defined(_POWER)
+	defined(_ARCH_PWR2) || defined(_POWER) || defined(__POWERPC__)
+#ifdef __APPLE__
+#define isc_pause() __asm__ volatile("or r27,r27,r27")
+#else
 #define isc_pause() __asm__ volatile("or 27,27,27")
+#endif
 #else
 #define isc_pause() sched_yield()
 #endif
